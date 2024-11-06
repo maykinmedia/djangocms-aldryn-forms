@@ -28,8 +28,9 @@ HELPER_SETTINGS = {
 
 
 def run():
-    from djangocms_helper import runner
+    from app_helper import runner
     runner.cms('aldryn_forms')
+    runner.cms('aldryn_forms.contrib.email_notifications')
 
 
 if __name__ == '__main__':
