@@ -9,7 +9,7 @@ import djangocms_attributes_field.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aldryn_forms', '0015_add_field_is_enable_autofill_from_url_params'),
+        ('aldryn_forms', '0015_fileupload_name_help_text'),
     ]
 
     operations = [
