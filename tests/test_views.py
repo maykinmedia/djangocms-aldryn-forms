@@ -9,8 +9,8 @@ from cms.appresolver import clear_app_resolvers
 from cms.test_utils.testcases import CMSTestCase
 
 
-# These means "less than or equal"
-CMS_3_6 = LooseVersion(cms.__version__) < LooseVersion('4.0')
+# These means 'less than or equal'
+CMS_3_11 = LooseVersion(cms.__version__) < LooseVersion("4.0")
 
 
 class SubmitFormViewTest(CMSTestCase):
@@ -27,13 +27,13 @@ class SubmitFormViewTest(CMSTestCase):
             'tpage',
             'test_page.html',
             'en',
-            published=True,
             apphook='FormsApp',
         )
-        try:
+        if CMS_3_11:
             self.placeholder = self.page.placeholders.get(slot='content')
-        except AttributeError:
-            self.placeholder = self.page.get_placeholders('en').get(slot='content')
+        else:  # 4.1
+            self.page_content = self.page.pagecontent_set.get()
+            self.placeholder = self.page_content.placeholders.get(slot='content')
 
         self.redirect_url = 'http://www.google.com'
 
@@ -52,7 +52,7 @@ class SubmitFormViewTest(CMSTestCase):
         )
         self.form_plugin.action_backend = 'default'
         self.form_plugin.save()
-        if CMS_3_6:
+        if CMS_3_11:
             self.page.publish('en')
 
         self.reload_urls()
@@ -85,14 +85,13 @@ class SubmitFormViewTest(CMSTestCase):
                 del sys.modules[module]
 
     def test_form_view_and_submission_with_apphook_django_gte_111(self):
-        if CMS_3_6:
+        if CMS_3_11:
             public_page = self.page.publisher_public
+            public_placeholder = public_page.placeholders.first()
         else:
             public_page = self.page
-        try:
-            public_placeholder = public_page.placeholders.first()
-        except AttributeError:
-            public_placeholder = public_page.get_placeholders('en').first()
+            page_content = public_page.pagecontent_set.get()
+            public_placeholder = page_content.placeholders.get(slot='content')
 
         public_page_form_plugin = (
             public_placeholder
@@ -119,7 +118,11 @@ class SubmitFormViewTest(CMSTestCase):
             published=True,
             apphook='FormsApp',
         )
-        placeholder = page.placeholders.get(slot='content')
+        if CMS_3_11:
+            placeholder = page.placeholders.first()
+        else:
+            page_content = page.pagecontent_set.get()
+            placeholder = page_content.placeholders.get(slot='content')
 
         form_plugin = add_plugin(
             placeholder,
@@ -171,7 +174,8 @@ class SubmitFormViewTest(CMSTestCase):
         form_plugin2.action_backend = 'default'
         form_plugin2.save()
 
-        page.publish('en')
+        if CMS_3_11:
+            page.publish('en')
         self.reload_urls()
         self.apphook_clear()
 
@@ -187,10 +191,13 @@ class SubmitFormViewTest(CMSTestCase):
             'multiple forms',
             'test_page.html',
             'en',
-            published=True,
             apphook='FormsApp',
         )
-        placeholder = page.placeholders.get(slot='content')
+        if CMS_3_11:
+            placeholder = page.placeholders.first()
+        else:
+            page_content = page.pagecontent_set.get()
+            placeholder = page_content.placeholders.get(slot='content')
 
         form_plugin = add_plugin(
             placeholder,
@@ -244,7 +251,8 @@ class SubmitFormViewTest(CMSTestCase):
         form_plugin2.action_backend = 'default'
         form_plugin2.save()
 
-        page.publish('en')
+        if CMS_3_11:
+            page.publish('en')
         self.reload_urls()
         self.apphook_clear()
 

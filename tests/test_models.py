@@ -7,10 +7,7 @@ from cms.models import Placeholder
 
 from filer.models import Folder
 
-from aldryn_forms.models import (
-    FileUploadFieldPlugin, ImageUploadFieldPlugin,
-    MultipleFilesUploadFieldPlugin, Option,
-)
+from aldryn_forms.models import FileUploadFieldPlugin, ImageUploadFieldPlugin, MultipleFilesUploadFieldPlugin, Option
 
 
 class OptionTestCase(TestCase):
