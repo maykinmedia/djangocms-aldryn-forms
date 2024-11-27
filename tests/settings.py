@@ -4,6 +4,7 @@
 HELPER_SETTINGS = {
     'INSTALLED_APPS': [
         'tests',
+        "aldryn_forms",
         'aldryn_forms.contrib.email_notifications',
         'djangocms_text_ckeditor',
         'captcha',
@@ -28,7 +29,7 @@ HELPER_SETTINGS = {
 
 
 def run():
-    from djangocms_helper import runner
+    from app_helper import runner
     runner.cms('aldryn_forms')
 
 
