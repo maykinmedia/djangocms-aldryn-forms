@@ -19,7 +19,7 @@ jobs:
         django: ['3.2', '4.2']
         cms: ['3.11','4.1']
 
-    name: Run the test suite (Python ${{ matrix.python }}, Django ${{ matrix.django }}, CMS ${{ matrix.mozilla_django_oidc }})
+    name: Run the test suite (Python ${{ matrix.python }}, Django ${{ matrix.django }}, CMS ${{ matrix.cms }})
 
     steps:
       - uses: actions/checkout@v4
